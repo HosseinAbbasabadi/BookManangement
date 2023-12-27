@@ -1,18 +1,35 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Book } from '../book';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
+import { BookService } from '../book.service';
 
 @Component({
   selector: 'app-book-ops',
   standalone: true,
-  imports: [RouterLink, FormsModule, ReactiveFormsModule, NgIf],
+  imports: [RouterLink, FormsModule, ReactiveFormsModule, NgIf, NgFor],
   templateUrl: './book-ops.component.html'
 })
-export class BookOpsComponent {
+export class BookOpsComponent implements OnInit {
 
-  guid: string | null
+  guid: string | null = ''
+  summary: string = ''
+
+  categories = [
+    {
+      id: 1,
+      title: 'Programming'
+    },
+    {
+      id: 2,
+      title: 'Testing'
+    },
+    {
+      id: 3,
+      title: 'Architecture'
+    },
+  ]
 
   bookForm!: FormGroup
   // bookForm = new FormGroup({
@@ -24,8 +41,11 @@ export class BookOpsComponent {
   //   isPublished: new FormControl(false),
   // })
 
-  constructor(private readonly activatedRoute: ActivatedRoute,
-    private readonly formBuilder: FormBuilder) {
+  constructor(
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly formBuilder: FormBuilder,
+    private readonly bookService: BookService) {
 
     this.bookForm = formBuilder.group({
       guid: [''],
@@ -33,7 +53,7 @@ export class BookOpsComponent {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(8)
+          Validators.maxLength(100)
         ]
       ],
       author: ['',
@@ -48,8 +68,26 @@ export class BookOpsComponent {
       isPublished: [false]
     })
 
-    this.guid = activatedRoute.snapshot.paramMap.get('guid')
-    console.log(this.guid)
+    this.bookForm
+      .valueChanges
+      .subscribe(data => {
+        this.summary = `the book named: ${data.title} authored by: ${data.author} published at: ${data.date} is in category: ${data.categoryId}`
+      })
+
+    // this.bookForm
+    //   .get('title')
+    //   ?.valueChanges
+    //   .subscribe(title => {
+    //     console.log(title)
+    //   })
+  }
+
+  ngOnInit(): void {
+    this.guid = this.activatedRoute.snapshot.paramMap.get('guid')
+    if (this.guid) {
+      const book = this.bookService.find(this.guid)!
+      this.bookForm.patchValue(book)
+    }
   }
 
   get title() {
@@ -64,5 +102,15 @@ export class BookOpsComponent {
     if (this.bookForm.invalid) {
       alert('form is invalid')
     }
+
+    const command = this.bookForm.value
+    if (this.guid) {
+      this.bookService.edit(command)
+    } else {
+      command.guid = crypto.randomUUID()
+      this.bookService.add(command)
+    }
+    
+    this.router.navigateByUrl('/book-list')
   }
 }

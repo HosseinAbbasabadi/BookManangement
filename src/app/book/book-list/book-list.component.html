@@ -11,10 +11,26 @@
             <div class="card-body">
                 <table class="table">
                     <thead>
-
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Is Published</th>
+                            <th>Operations</th>
+                        </tr>
                     </thead>
                     <tbody>
-
+                        <tr *ngFor="let item of books">
+                            <td>{{item.title}}</td>
+                            <td>{{item.author}}</td>
+                            <td>{{item.date}}</td>
+                            <td>{{item.categoryId}}</td>
+                            <td>{{item.isPublished}}</td>
+                            <td>
+                                <a class="btn btn-warning" [routerLink]="['/book-edit', item.guid]">Edit</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

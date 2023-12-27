@@ -27,11 +27,19 @@ export class BookService {
 
   add(book: Book) {
     this.books.push(book)
-    localStorage.setItem(this.lsName, JSON.stringify(this.books))
+    this.localStorageService.setItem(this.lsName, JSON.stringify(this.books))
   }
 
-  find(id: number) {
-    return this.books.find(x => x.id == id)
+  edit(book: Book) {
+    const books = this.list()
+    const index = books.findIndex(x => x.guid == book.guid)
+    books.splice(index, 1)
+    books.push(book)
+    this.localStorageService.setItem(this.lsName, JSON.stringify(books))
+  }
+
+  find(guid: string) {
+    return this.books.find(x => x.guid == guid)
   }
 
   findBy(title: string) {

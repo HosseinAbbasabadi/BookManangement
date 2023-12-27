@@ -53,8 +53,8 @@
                     <div class="col-md-4">
                         <label for="categoryId" class="form-label">Category</label>
                         <select id="categoryId" class="form-select" formControlName="categoryId">
-                            <option selected>Choose Book Category</option>
-                            <option>...</option>
+                            <option value="0" selected>Choose Book Category</option>
+                            <option [value]="item.id" *ngFor="let item of categories">{{item.title}}</option>
                         </select>
                     </div>
                     <div class="col-4">
@@ -67,6 +67,10 @@
                             </label>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <p class="text-primary">Summary: {{summary}}</p>
+                    </div>
+
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary">Create</button>
                     </div>
