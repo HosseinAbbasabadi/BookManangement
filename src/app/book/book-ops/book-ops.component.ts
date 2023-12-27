@@ -4,11 +4,15 @@ import { Book } from '../book';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { BookService } from '../book.service';
+import { BookCategoryService } from '../book-category.service';
+import { BookCategory } from '../book-category';
+import { NgPersianDatepickerComponent, NgPersianDatepickerModule } from 'ng-persian-datepicker';
+import { Jalali } from 'jalali-ts';
 
 @Component({
   selector: 'app-book-ops',
   standalone: true,
-  imports: [RouterLink, FormsModule, ReactiveFormsModule, NgIf, NgFor],
+  imports: [RouterLink, FormsModule, ReactiveFormsModule, NgIf, NgFor, NgPersianDatepickerModule],
   templateUrl: './book-ops.component.html'
 })
 export class BookOpsComponent implements OnInit {
@@ -16,20 +20,10 @@ export class BookOpsComponent implements OnInit {
   guid: string | null = ''
   summary: string = ''
 
-  categories = [
-    {
-      id: 1,
-      title: 'Programming'
-    },
-    {
-      id: 2,
-      title: 'Testing'
-    },
-    {
-      id: 3,
-      title: 'Architecture'
-    },
-  ]
+  dateMin = Jalali.parse('1402-10-01').valueOf()
+  dateMax = Jalali.parse('1402-11-01').valueOf()
+
+  categories: BookCategory[] = []
 
   bookForm!: FormGroup
   // bookForm = new FormGroup({
@@ -45,7 +39,8 @@ export class BookOpsComponent implements OnInit {
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
-    private readonly bookService: BookService) {
+    private readonly bookService: BookService,
+    private readonly bookCategoryService: BookCategoryService) {
 
     this.bookForm = formBuilder.group({
       guid: [''],
@@ -83,6 +78,7 @@ export class BookOpsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.categories = this.bookCategoryService.list()
     this.guid = this.activatedRoute.snapshot.paramMap.get('guid')
     if (this.guid) {
       const book = this.bookService.find(this.guid)!
@@ -110,7 +106,8 @@ export class BookOpsComponent implements OnInit {
       command.guid = crypto.randomUUID()
       this.bookService.add(command)
     }
-    
+
     this.router.navigateByUrl('/book-list')
+    // this.router.navigate(['', ])
   }
 }

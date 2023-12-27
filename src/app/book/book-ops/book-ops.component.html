@@ -47,8 +47,10 @@
                     </div>
                     <div class="col-4">
                         <label for="date" class="form-label">Publish Date</label>
-                        <input type="text" class="form-control" id="date" formControlName="date"
-                            placeholder="1402/10/06" autocomplete="off">
+                        <ng-persian-datepicker [dateInitValue]="false" [dateMin]="dateMin" [dateMax]="dateMax"
+                            [timeEnable]="true">
+                            <input type="text" class="form-control" id="date" formControlName="date" autocomplete="off">
+                        </ng-persian-datepicker>
                     </div>
                     <div class="col-md-4">
                         <label for="categoryId" class="form-label">Category</label>

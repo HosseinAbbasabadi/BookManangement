@@ -4,5 +4,6 @@ export type Book = {
     author: string,
     date: string,
     categoryId: number,
+    categoryTitle?: string,
     isPublished: boolean
 }
