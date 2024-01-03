@@ -5,6 +5,9 @@
                 Book List ({{books.length}})
                 <div>
                     <a class="btn btn-success mx-1" [routerLink]="['/book-create']">Create New Book</a>
+                    <button type="button" class="btn btn-warning" (click)="openModal()">
+                        Launch Modal
+                    </button>
                     <a class="btn btn-primary mx-1" [routerLink]="['/']">Go To Dashboard</a>
                 </div>
             </div>
@@ -31,12 +34,93 @@
                                 <span *ngIf="!item.isPublished" class="text-danger bg-soft-danger">NO</span>
                             </td>
                             <td>
-                                <a class="btn btn-warning" [routerLink]="['/book-edit', item.guid]">Edit</a>
+                                <!-- <a class="btn btn-warning" [routerLink]="['/book-edit', item.guid]">Edit</a> -->
+                                <a class="btn btn-warning" (click)="openModal(item.guid)">Edit</a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="opsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <form [formGroup]="bookForm" (submit)="submit()">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create New Book</h5>
+                    <button type="button" class="btn-close" (click)="opsModalClose()"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <div class="col-md-6">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" formControlName="title" autocomplete="off">
+                        <ul class="text-danger" *ngIf="title?.invalid && (title?.touched || title?.dirty)">
+                            <li *ngIf="title?.errors?.['required']">
+                                Title is required.
+                            </li>
+                            <li *ngIf="title?.errors?.['minlength']">
+                                Min len is {{title?.errors?.['minlength'].requiredLength}}
+                            </li>
+                            <li *ngIf="title?.errors?.['maxlength']">
+                                Max len is {{title?.errors?.['maxlength'].requiredLength}}
+                            </li>
+                            <li *ngIf="title?.errors?.['urlValid']">
+                                This is not a url
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="author" class="form-label">Author</label>
+                        <input type="text" class="form-control" id="author" formControlName="author" autocomplete="off">
+                        <ul class="text-danger" *ngIf="author?.invalid && (author?.touched || author?.dirty)">
+                            <li *ngIf="author?.errors?.['required']">
+                                Author is required.
+                            </li>
+                            <li *ngIf="author?.errors?.['minlength']">
+                                Min len is {{author?.errors?.['minlength'].requiredLength}}
+                            </li>
+                            <li *ngIf="author?.errors?.['maxlength']">
+                                Max len is {{author?.errors?.['maxlength'].requiredLength}}
+                            </li>
+                            <li *ngIf="author?.errors?.['urlValid']">
+                                This is not a url
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <label for="date" class="form-label">Publish Date</label>
+                        <ng-persian-datepicker [dateInitValue]="false" [dateMin]="dateMin" [dateMax]="dateMax">
+                            <input type="text" class="form-control" id="date" formControlName="date" autocomplete="off">
+                        </ng-persian-datepicker>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="categoryId" class="form-label">Category</label>
+                        <select id="categoryId" class="form-select" formControlName="categoryId">
+                            <option value="0" selected>Choose Book Category</option>
+                            <option [value]="item.id" *ngFor="let item of categories">{{item.title}}</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label sr-only"></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="isPublished"
+                                formControlName="isPublished">
+                            <label class="form-check-label" for="isPublished">
+                                Is Published
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="opsModalClose()">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

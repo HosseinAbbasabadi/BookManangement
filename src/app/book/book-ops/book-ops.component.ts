@@ -1,18 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Book } from '../book';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { BookService } from '../book.service';
 import { BookCategoryService } from '../book-category.service';
 import { BookCategory } from '../book-category';
-import { NgPersianDatepickerComponent, NgPersianDatepickerModule } from 'ng-persian-datepicker';
+import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 import { Jalali } from 'jalali-ts';
+import { Hotkey, HotkeyModule, HotkeyOptions, HotkeysService } from 'angular2-hotkeys';
+import { HotkeysAllowedIn, ctrlS } from '../../shared/hotkey-names';
 
 @Component({
   selector: 'app-book-ops',
   standalone: true,
-  imports: [RouterLink, FormsModule, ReactiveFormsModule, NgIf, NgFor, NgPersianDatepickerModule],
+  imports: [
+    RouterLink,
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    NgPersianDatepickerModule
+  ],
   templateUrl: './book-ops.component.html'
 })
 export class BookOpsComponent implements OnInit {
@@ -84,6 +92,16 @@ export class BookOpsComponent implements OnInit {
       const book = this.bookService.find(this.guid)!
       this.bookForm.patchValue(book)
     }
+
+    this.registerHotkeys()
+  }
+
+  registerHotkeys() {
+    // this.hotkeyService
+    //   .add(new Hotkey(ctrlS, (_event: KeyboardEvent): boolean => {
+    //     console.log("Ctrl + S")
+    //     return false
+    //   }, HotkeysAllowedIn))
   }
 
   get title() {

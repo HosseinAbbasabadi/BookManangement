@@ -15,7 +15,10 @@ export class BookService {
   }
 
   initList(): Book[] {
-    const list = JSON.parse(this.localStorageService.getItem(this.lsName))
+    const books = this.localStorageService.getItem(this.lsName)
+    if (!books) return []
+
+    const list = JSON.parse(books)
     if (!list) return []
 
     return list
