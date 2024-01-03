@@ -9,6 +9,7 @@
                         Launch Modal
                     </button>
                     <a class="btn btn-primary mx-1" [routerLink]="['/']">Go To Dashboard</a>
+                    <a class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#infoModal">Open Info</a>
                 </div>
             </div>
             <div class="card-body">
@@ -45,14 +46,12 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="opsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-    data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="opsModal" tabindex="-1" aria-labelledby="opsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <form [formGroup]="bookForm" (submit)="submit()">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Create New Book</h5>
+                    <h5 class="modal-title" id="opsModalLabel">Create New Book</h5>
                     <button type="button" class="btn-close" (click)="opsModalClose()"></button>
                 </div>
                 <div class="modal-body row g-3">
@@ -124,3 +123,7 @@
         </form>
     </div>
 </div>
+
+<app-modal #infoModal (submitClicked)="submited()">
+    <h1>this is my information</h1>
+</app-modal>

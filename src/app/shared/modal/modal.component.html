@@ -1,0 +1,19 @@
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoLabel">Information</h5>
+                    <button type="button" class="btn-close"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <ng-content></ng-content>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="onSubmitClicked()">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

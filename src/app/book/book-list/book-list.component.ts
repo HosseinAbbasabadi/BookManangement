@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BookService } from '../book.service';
 import { Book } from '../book';
@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 import { BookCategory } from '../book-category';
 import { Jalali } from 'jalali-ts';
+import { ModalComponent } from '../../shared/modal/modal.component';
 declare var bootstrap: any
 declare var $: any
 
@@ -20,7 +21,8 @@ declare var $: any
     NgIf,
     FormsModule,
     ReactiveFormsModule,
-    NgPersianDatepickerModule
+    NgPersianDatepickerModule,
+    ModalComponent
   ],
   templateUrl: './book-list.component.html'
 })
@@ -33,6 +35,8 @@ export class BookListComponent implements OnInit, AfterViewInit {
   dateMin = Jalali.parse('1402-10-01').valueOf()
   dateMax = Jalali.parse('1402-11-01').valueOf()
   modal: any
+
+  @ViewChild('infoModal') infoModal: ModalComponent;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -122,5 +126,10 @@ export class BookListComponent implements OnInit, AfterViewInit {
 
   opsModalClose() {
     this.modal.hide()
+  }
+
+  submited() {
+    console.log('modal submited')
+    this.infoModal.close()
   }
 }
